@@ -1,0 +1,394 @@
+/* 토큰: 프로토타입 v51(ui-mockup DESIGN.md §3~§4)과 동일 계열로 정렬. 하드코딩 색상 금지, 전부 var() 경유. */
+:root {
+  --paper-frost: #F2F3F0;   /* 페이지 배경 (차가운 off-white, 앱과 동일) */
+  --paper-sticker: #F6F4EF; /* 밀크 글래스 폴백 지면 */
+  --color-ink: #2C2B27;     /* 본문 먹색 */
+  --silver-fresh: #55606C;  /* 갓 그은 은필 */
+  --color-muted: #6E6961;
+
+  /* 계절광 3광원 (프로토타입 v26 레시피) */
+  --light-a: rgba(148, 172, 192, 0.62);
+  --light-b: rgba(185, 199, 209, 0.36);
+  --light-c: rgba(160, 182, 199, 0.44);
+  --motif: url("assets/images/motif-branch-winter.webp");
+
+  --font-display: 'Gowun Batang', serif;
+  --font-body: 'Pretendard', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+
+  --rule: 1px solid rgba(85, 96, 108, 0.28);
+  --rule-faint: 1px solid rgba(85, 96, 108, 0.14);
+
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 2rem;
+  --space-4: 3rem;
+  --space-5: 5.5rem;
+  --content-max: 74rem;
+
+  /* 형태 규칙: 인터랙티브=pill, 지면(카드·액자)=14px. 프로토타입과 동일 문법 */
+  --radius-plate: 14px;
+}
+
+body[data-season="winter"] {
+  --light-a: rgba(148, 172, 192, 0.62);
+  --light-b: rgba(185, 199, 209, 0.36);
+  --light-c: rgba(160, 182, 199, 0.44);
+  --motif: url("assets/images/motif-branch-winter.webp");
+}
+body[data-season="spring"] {
+  --light-a: rgba(216, 196, 132, 0.48);
+  --light-b: rgba(228, 214, 164, 0.32);
+  --light-c: rgba(208, 190, 138, 0.36);
+  --motif: url("assets/images/motif-branch-spring.webp");
+}
+body[data-season="summer"] {
+  --light-a: rgba(178, 200, 142, 0.48);
+  --light-b: rgba(200, 214, 166, 0.32);
+  --light-c: rgba(168, 194, 140, 0.36);
+  --motif: url("assets/images/motif-branch-summer.webp");
+}
+body[data-season="autumn"] {
+  --light-a: rgba(206, 158, 132, 0.46);
+  --light-b: rgba(219, 184, 162, 0.30);
+  --light-c: rgba(198, 152, 128, 0.34);
+  --motif: url("assets/images/motif-branch-autumn.webp");
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--paper-frost);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-weight: 300;
+  line-height: 1.75;
+  word-break: keep-all;
+}
+
+img { max-width: 100%; display: block; }
+
+/* signature: 계절광 3광원 + 은필 가지 텍스처 (프로토타입 상속, 1.2s 크로스페이드) */
+.season-light {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(90% 55% at 18% -8%, var(--light-a), transparent 62%),
+    radial-gradient(70% 45% at 88% 22%, var(--light-b), transparent 65%),
+    radial-gradient(85% 55% at 50% 108%, var(--light-c), transparent 62%);
+  transition: background 1.2s ease;
+  pointer-events: none;
+}
+.season-light::after {
+  /* 은필 텍스처: 대비 낮게, 피사체가 아니라 질감 (프로토 v5) */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--motif), var(--motif);
+  background-repeat: no-repeat, no-repeat;
+  background-size: 60%, 85%;
+  background-position: 108% -6%, -35% 105%;
+  mix-blend-mode: multiply;
+  opacity: 0.22;
+  filter: contrast(0.95) saturate(0.85);
+  transition: opacity 1.2s ease;
+}
+
+/* nav: 유리는 크롬에만 */
+.nav {
+  position: fixed;
+  inset: 0 0 auto 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem var(--space-3);
+  backdrop-filter: blur(10px) saturate(1.2);
+  -webkit-backdrop-filter: blur(10px) saturate(1.2);
+  background: linear-gradient(to bottom, rgba(242, 243, 240, 0.72), rgba(242, 243, 240, 0.38));
+  border-bottom: var(--rule-faint);
+  z-index: 10;
+}
+.nav__logo { font-family: var(--font-display); font-weight: 700; font-size: 1.1875rem; }
+.nav__links { display: flex; gap: var(--space-3); align-items: center; }
+.nav__links a { text-decoration: none; font-size: 0.9375rem; }
+.nav__links a:not(.btn) { color: var(--color-ink); }
+
+/* buttons: 인터랙티브=pill, 액센트는 먹 */
+.btn {
+  display: inline-block;
+  padding: 0.875rem 2.25rem;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9375rem;
+  color: var(--paper-frost);
+  background: var(--color-ink);
+  border-radius: 999px;
+  box-shadow: 0 6px 18px rgba(44, 43, 39, 0.18);
+  transition: transform 150ms ease-in-out, box-shadow 150ms ease-in-out;
+}
+.btn:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(44, 43, 39, 0.22); }
+.btn:active { transform: translateY(1px) scale(0.98); }
+.btn--small { padding: 0.4375rem 1.25rem; font-size: 0.875rem; box-shadow: none; }
+
+/* hero: 카피 좌 / 앱 실물 우. 폰 뒤가 곧 무대(계절광+은필 가지) */
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+  gap: var(--space-4);
+  align-items: center;
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding: calc(var(--space-5) + 1.5rem) var(--space-4) var(--space-4);
+}
+.hero__label {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  letter-spacing: 0.14em;
+  color: var(--silver-fresh);
+  margin-bottom: var(--space-2);
+}
+.hero__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.5rem, 5vw, 4.25rem);
+  line-height: 1.18;
+  letter-spacing: -0.01em;
+}
+.hero__sub {
+  margin-top: var(--space-3);
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  color: var(--silver-fresh);
+}
+.hero__copy .btn { margin-top: var(--space-3); }
+.hero__figure.hero__figure--app { border: none; padding: 0; position: relative; perspective: 1000px; }
+.hero__figure.hero__figure--app picture {
+  display: block;
+  position: relative;
+  width: fit-content;
+  margin-inline: auto;
+  transform-style: preserve-3d;
+}
+/* 기기 두께: 프레임 실루엣의 뒷판 두 겹을 -Z로 깔아 회전 시 옆면이 보이게 */
+.hero__figure.hero__figure--app picture::before,
+.hero__figure.hero__figure--app picture::after {
+  content: "";
+  position: absolute;
+  inset: 1px 0;
+  border-radius: 2.05rem;
+  background: linear-gradient(90deg, #4A4842, #2A2926 30%);
+  transform: translateZ(-7px);
+}
+.hero__figure.hero__figure--app picture::after {
+  background: #23221F;
+  transform: translateZ(-14px);
+}
+.hero__figure.hero__figure--app img {
+  position: relative;
+  max-width: 14.5rem;
+  transform: translateZ(0.1px);
+  filter: drop-shadow(0 24px 48px rgba(44, 43, 39, 0.22));
+}
+
+/* seasons: 2열 책력 그리드, 사진은 스티커 지면 */
+.seasons, .features {
+  padding: var(--space-5) var(--space-4);
+  max-width: var(--content-max);
+  margin-inline: auto;
+}
+.section__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.25rem, 3.5vw, 3rem);
+  line-height: 1.25;
+  margin-bottom: var(--space-2);
+}
+.section__lead {
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  color: var(--silver-fresh);
+  margin-bottom: var(--space-3);
+  max-width: 34rem;
+}
+.seasons {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: var(--space-4);
+}
+.seasons .section__title, .seasons .section__lead { grid-column: 1 / -1; }
+.season {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-content: start;
+  gap: var(--space-2);
+  padding: var(--space-3) 0;
+  border-top: var(--rule);
+}
+.season__figure {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.72));
+  border: 1px solid rgba(255, 255, 255, 0.62);
+  border-radius: var(--radius-plate);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 6px 18px rgba(85, 96, 108, 0.10);
+  padding: var(--space-1);
+  overflow: hidden;
+  transition: box-shadow 300ms ease;
+}
+.season__figure img {
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  width: 100%;
+  border-radius: calc(var(--radius-plate) - 6px);
+  filter: saturate(0.85);
+  transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.season:hover .season__figure { box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 12px 28px rgba(85, 96, 108, 0.16); }
+.season:hover .season__figure img { transform: scale(1.03); }
+.season__label {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--silver-fresh);
+  margin-bottom: var(--space-1);
+}
+.season__copy h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.75rem;
+  margin-bottom: var(--space-1);
+}
+.season__copy p:last-child { color: var(--color-muted); }
+
+/* features: 앱 실물 쇼케이스 3열, 폰은 지면 위 오브제 */
+.features {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: var(--space-4);
+}
+.features .section__title { grid-column: 1 / -1; }
+.shot {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-content: start;
+  gap: var(--space-2);
+  padding: var(--space-3) 0;
+  border-top: var(--rule);
+}
+.shot__figure img {
+  max-width: 10.5rem;
+  margin-inline: auto;
+  filter: drop-shadow(0 16px 32px rgba(44, 43, 39, 0.18));
+  transition: transform 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.shot:hover .shot__figure img { transform: translateY(-6px); }
+
+/* 계절 라벨: 계절 잉크 (프로토 muted 톤의 진한 버전) */
+.season[data-season="winter"] .season__label { color: #6E8296; }
+.season[data-season="spring"] .season__label { color: #9A8348; }
+.season[data-season="summer"] .season__label { color: #6D8455; }
+.season[data-season="autumn"] .season__label { color: #A06B4E; }
+.shot__label {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--silver-fresh);
+  margin-bottom: var(--space-1);
+}
+.shot__copy h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.375rem;
+  margin-bottom: var(--space-1);
+}
+.shot__copy p:last-child { color: var(--color-muted); font-size: 0.9375rem; }
+
+/* band: 풀블리드 무드 밴드 — 잡지 펼침면 (Aesop 패턴) */
+.band {
+  position: relative;
+  min-height: 28rem;
+  max-height: 60vh;
+  overflow: hidden;
+  display: grid;
+  place-items: end center;
+  margin: var(--space-4) 0;
+}
+.band__img {
+  position: absolute;
+  inset: -14% 0 auto 0;
+  width: 100%;
+  height: 128%;
+  object-fit: cover;
+  filter: saturate(0.85);
+  will-change: transform;
+}
+.band::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(rgba(44, 43, 39, 0.18), rgba(44, 43, 39, 0.34));
+}
+.band__copy {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+  color: var(--paper-frost);
+  text-shadow: 0 1px 12px rgba(44, 43, 39, 0.35);
+  padding: 0 var(--space-3) var(--space-4);
+  text-align: center;
+}
+
+/* privacy: 밀크 글래스 지면 한 장 */
+.privacy {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  color: var(--silver-fresh);
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: var(--space-2) var(--space-3);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.6));
+  border: 1px solid rgba(255, 255, 255, 0.62);
+  border-radius: 999px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 6px 18px rgba(85, 96, 108, 0.08);
+}
+
+/* cta */
+.cta { text-align: center; padding: var(--space-5) var(--space-3); }
+.cta__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2rem, 4.5vw, 3.5rem);
+  line-height: 1.25;
+  margin-bottom: var(--space-3);
+}
+
+.footer {
+  padding: var(--space-3) var(--space-4);
+  color: var(--color-muted);
+  font-size: 0.875rem;
+  border-top: var(--rule-faint);
+}
+
+/* 모바일 */
+@media (max-width: 768px) {
+  .hero {
+    grid-template-columns: 1fr;
+    padding: var(--space-5) var(--space-3) var(--space-3);
+  }
+  .hero__figure.hero__figure--app img { max-width: 13rem; }
+  .hero__figure.hero__figure--app picture::before,
+  .hero__figure.hero__figure--app picture::after { border-radius: 1.84rem; }
+  .seasons, .features { grid-template-columns: 1fr; padding: var(--space-4) var(--space-3); }
+  .shot__figure img { max-width: 11rem; }
+  .season-light::after { background-size: 120%, 150%; background-position: 130% -4%, -60% 108%; }
+  .nav__links a:not(.btn) { display: none; }
+  .privacy { border-radius: var(--radius-plate); margin-inline: var(--space-3); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .season-light, .season-light::after { transition: none; }
+  .btn { transition: none; }
+  .season__figure, .season__figure img, .shot__figure img { transition: none; }
+  .season:hover .season__figure img { transform: none; }
+  .shot:hover .shot__figure img { transform: none; }
+}
