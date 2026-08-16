@@ -216,7 +216,17 @@ img { max-width: 100%; display: block; }
   grid-template-columns: repeat(2, minmax(0, 1fr));
   column-gap: var(--space-4);
 }
-.seasons .section__title, .seasons .section__lead { grid-column: 1 / -1; }
+.seasons .section__title, .seasons .section__lead, .seasons .section__hedge { grid-column: 1 / -1; }
+/* 계절 4개 뒤에 붙는 표준 hedge — 앱 온보딩 인트로 C와 같은 역할(경향 서술을 받는다) */
+.section__hedge {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--silver-fresh);
+  max-width: 34rem;
+  margin-top: var(--space-3);
+  padding-top: var(--space-2);
+  border-top: var(--rule);
+}
 .season {
   display: grid;
   grid-template-columns: 1fr;
@@ -342,6 +352,7 @@ img { max-width: 100%; display: block; }
   text-align: center;
   font-family: var(--font-mono);
   font-size: 0.875rem;
+  line-height: 1.85;   /* 3줄 정밀 서술(2026-08-11) — 모노 한글이 붙어 보이지 않게 */
   color: var(--silver-fresh);
   max-width: 46rem;
   margin: 0 auto;
